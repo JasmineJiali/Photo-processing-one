@@ -1,0 +1,32 @@
+%Í¼ÏñÆ´½Ó
+F = imread('15_2.jpg');
+F = imrotate(F,180);
+F = rgb2gray(F);
+F = im2double(F);
+G = imread('15_dousen.bmp');
+G = rgb2gray(G);
+G = im2double(G);
+% G = G+0.1;
+% G(G<0.1) = 0;
+Mask = G;
+Mask = im2bw(Mask,0);
+[M1,N1] = size(Mask);
+G_revise = G(25:330,130:320);
+Mask_revise = Mask(25:330,130:320);
+Mask_revise = imresize(Mask_revise,4);
+G_revise = imresize(G_revise,4);
+[M1,N1] = size(Mask_revise);
+
+[M2,N2] = size(F);
+I1 = zeros(M2,N2);
+I1(M2-M1+1:M2,1:N1) = Mask_revise;
+I2 = zeros(M2,N2);
+I2(M2-M1+1:M2,1:N1) = G_revise;
+I1 = ~I1;
+F = I1.*F+I2;
+% w=fspecial('gaussian',[10 10],2);
+% F=imfilter(F,w);
+F = medfilt2(F,[8 8]);
+% F= imfilter(F,ones(4,4)/16);
+figure(1),imshow(F);
+% figure(2),imshow(I1);
